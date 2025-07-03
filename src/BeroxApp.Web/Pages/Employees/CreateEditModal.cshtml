@@ -1,0 +1,81 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using BeroxApp.Localization
+@using BeroxApp.Web.Pages.Employees
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model CreateEditModalModel
+@inject IHtmlLocalizer<BeroxAppResource> L
+@{
+    Layout = null;
+}
+
+<form asp-page="/Employees/CreateEditModal">
+    <abp-modal>
+        <abp-modal-header title="@(Model.Id == Guid.Empty ? L["NewEmployee"].Value : L["EditEmployee"].Value)"></abp-modal-header>
+        <abp-modal-body>
+            <input asp-for="Id" type="hidden" />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Employee.FirstName">@L["FirstName"] *</label>
+                        <input type="text" class="form-control" asp-for="Employee.FirstName" required />
+                        <span asp-validation-for="Employee.FirstName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Employee.LastName">@L["LastName"] *</label>
+                        <input type="text" class="form-control" asp-for="Employee.LastName" required />
+                        <span asp-validation-for="Employee.LastName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Employee.PhoneNumber">@L["PhoneNumber"]</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                            <input type="tel" class="form-control" asp-for="Employee.PhoneNumber"
+                                   placeholder="5XX XXX XX XX" />
+                        </div>
+                        <span asp-validation-for="Employee.PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Employee.Email">@L["Email"]</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input type="email" class="form-control" asp-for="Employee.Email" />
+                        </div>
+                        <span asp-validation-for="Employee.Email" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" asp-for="Employee.MonthlySalary">@L["MonthlySalary"] (₺) *</label>
+                <div class="input-group">
+                    <span class="input-group-text">₺</span>
+                    <input type="number" class="form-control" asp-for="Employee.MonthlySalary"
+                           step="0.01" min="0" required />
+                </div>
+                <span asp-validation-for="Employee.MonthlySalary" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" asp-for="Employee.IsActive" />
+                    <label class="form-check-label" asp-for="Employee.IsActive">
+                        @L["Active"]
+                    </label>
+                </div>
+                <span asp-validation-for="Employee.IsActive" class="text-danger"></span>
+            </div>
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>

@@ -59,6 +59,30 @@
     "ServiceDeletionConfirmationMessage": "Service '{0}' will be deleted. Are you sure?",
     "SuccessfullyDeleted": "Successfully deleted",
     "SuccessfullyCreated": "Successfully created",
-    "SuccessfullyUpdated": "Successfully updated"
+    "SuccessfullyUpdated": "Successfully updated",
+
+    "Customers": "Customers",
+    "NewCustomer": "New Customer",
+    "EditCustomer": "Edit Customer",
+    "FirstName": "First Name",
+    "LastName": "Last Name",
+    "FullName": "Full Name",
+    "PhoneNumber": "Phone Number",
+    "Email": "Email",
+    "Notes": "Notes",
+    "CreationTime": "Creation Time",
+    "CustomerDeletionConfirmationMessage": "Customer '{0}' will be deleted. Are you sure?",
+    "DuplicatePhoneNumber": "This phone number is already registered!",
+    "PhoneNumberMustBe10Digits": "Phone number must be 10 digits",
+    "PhoneNumberMustBeDigits": "Phone number must contain only digits",
+    "Customer:DuplicatePhoneNumber": "This phone number is already registered!",
+
+    "NewEmployee": "New Employee",
+    "EditEmployee": "Edit Employee",
+    "MonthlySalary": "Monthly Salary",
+    "EmployeeDeletionConfirmationMessage": "Employee '{0}' will be deleted. Are you sure?",
+    "SalaryMustBePositive": "Salary must be greater than 0",
+    "Employee": "Employee",
+    "SelectEmployee": "Select Employee"
   }
 }

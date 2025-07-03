@@ -1,0 +1,53 @@
+﻿@page
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using BeroxApp.Customers
+@using BeroxApp.Web.Pages.Customers
+@using BeroxApp.Localization
+@using BeroxApp.Permissions
+@using Microsoft.Extensions.Localization
+@model IndexModel
+@inject IAuthorizationService AuthorizationService
+@inject IStringLocalizer<BeroxAppResource> L
+
+
+@section scripts
+{
+    <abp-script-bundle>
+        <abp-script src="/Pages/Customers/CreateEditModal.js" />
+        <abp-script src="/Pages/Customers/Index.js" />
+    </abp-script-bundle>
+}
+
+<abp-card>
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <abp-card-title>@L["Customers"]</abp-card-title>
+            </abp-column>
+            <abp-column size-md="_6" class="text-end">
+                @if (await AuthorizationService.IsGrantedAsync(BeroxAppPermissions.Customers.Create))
+                {
+                    <abp-button id="NewCustomerButton"
+                                text="@L["NewCustomer"]"
+                                icon="plus"
+                                button-type="Primary" />
+                }
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="CustomersTable" class="nowrap">
+            <thead>
+                <tr>
+                    <th>@L["Actions"]</th>
+                    <th>@L["FullName"]</th>
+                    <th>@L["PhoneNumber"]</th>
+                    <th>@L["Email"]</th>
+                    <th>@L["Notes"]</th>
+                    <th>@L["CreationTime"]</th>
+                </tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>

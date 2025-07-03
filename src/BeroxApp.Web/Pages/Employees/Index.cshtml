@@ -1,0 +1,54 @@
+﻿@page
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using BeroxApp.Employees
+@using BeroxApp.Web.Pages.Employees
+@using BeroxApp.Localization
+@using BeroxApp.Permissions
+@using Microsoft.Extensions.Localization
+@model IndexModel
+@inject IAuthorizationService AuthorizationService
+@inject IStringLocalizer<BeroxAppResource> L
+@{
+}
+
+@section scripts
+{
+    <abp-script-bundle>
+        <abp-script src="/Pages/Employees/CreateEditModal.js" />
+        <abp-script src="/Pages/Employees/Index.js" />
+    </abp-script-bundle>
+}
+
+<abp-card>
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <abp-card-title>@L["Employees"]</abp-card-title>
+            </abp-column>
+            <abp-column size-md="_6" class="text-end">
+                @if (await AuthorizationService.IsGrantedAsync(BeroxAppPermissions.Employees.Create))
+                {
+                    <abp-button id="NewEmployeeButton"
+                                text="@L["NewEmployee"]"
+                                icon="plus"
+                                button-type="Primary" />
+                }
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="EmployeesTable" class="nowrap">
+            <thead>
+                <tr>
+                    <th>@L["Actions"]</th>
+                    <th>@L["FullName"]</th>
+                    <th>@L["PhoneNumber"]</th>
+                    <th>@L["Email"]</th>
+                    <th>@L["MonthlySalary"]</th>
+                    <th>@L["Status"]</th>
+                </tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>

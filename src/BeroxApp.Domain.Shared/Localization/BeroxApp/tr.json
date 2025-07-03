@@ -60,7 +60,32 @@
     "ServiceDeletionConfirmationMessage": "{0} hizmeti silinecek. Emin misiniz?",
     "SuccessfullyDeleted": "Başarıyla silindi",
     "SuccessfullyCreated": "Başarıyla oluşturuldu",
-    "SuccessfullyUpdated": "Başarıyla güncellendi"
+    "SuccessfullyUpdated": "Başarıyla güncellendi",
 
+
+    "Customers": "Müşteriler",
+    "NewCustomer": "Yeni Müşteri",
+    "EditCustomer": "Müşteriyi Düzenle",
+    "FirstName": "Ad",
+    "LastName": "Soyad",
+    "FullName": "Ad Soyad",
+    "PhoneNumber": "Telefon Numarası",
+    "Email": "E-posta",
+    "Notes": "Notlar",
+    "CreationTime": "Kayıt Tarihi",
+    "CustomerDeletionConfirmationMessage": "{0} müşterisi silinecek. Emin misiniz?",
+    "DuplicatePhoneNumber": "Bu telefon numarası başka bir müşteride kayıtlı!",
+    "PhoneNumberMustBe10Digits": "Telefon numarası 10 haneli olmalıdır",
+    "PhoneNumberMustBeDigits": "Telefon numarası sadece rakamlardan oluşmalıdır",
+    "Customer:DuplicatePhoneNumber": "Bu telefon numarası zaten kayıtlı!",
+
+    "Employees": "Çalışanlar",
+    "NewEmployee": "Yeni Çalışan",
+    "EditEmployee": "Çalışanı Düzenle",
+    "MonthlySalary": "Aylık Maaş",
+    "EmployeeDeletionConfirmationMessage": "{0} çalışanı silinecek. Emin misiniz?",
+    "SalaryMustBePositive": "Maaş 0'dan büyük olmalıdır",
+    "Employee": "Çalışan",
+    "SelectEmployee": "Çalışan Seçin"
   }
 }

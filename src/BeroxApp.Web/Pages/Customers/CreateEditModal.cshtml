@@ -1,0 +1,62 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using BeroxApp.Localization
+@using BeroxApp.Web.Pages.Customers
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model CreateEditModalModel
+@inject IHtmlLocalizer<BeroxAppResource> L
+@{
+    Layout = null;
+}
+
+<form asp-page="/Customers/CreateEditModal">
+    <abp-modal>
+        <abp-modal-header title="@(Model.Id == Guid.Empty ? L["NewCustomer"].Value : L["EditCustomer"].Value)"></abp-modal-header>
+        <abp-modal-body>
+            <input asp-for="Id" type="hidden" />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Customer.FirstName">@L["FirstName"] *</label>
+                        <input type="text" class="form-control" asp-for="Customer.FirstName" required />
+                        <span asp-validation-for="Customer.FirstName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Customer.LastName">@L["LastName"] *</label>
+                        <input type="text" class="form-control" asp-for="Customer.LastName" required />
+                        <span asp-validation-for="Customer.LastName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" asp-for="Customer.PhoneNumber">@L["PhoneNumber"] *</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                    <input type="tel" class="form-control" asp-for="Customer.PhoneNumber"
+                           placeholder="5XX XXX XX XX" required />
+                </div>
+                <span asp-validation-for="Customer.PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" asp-for="Customer.Email">@L["Email"]</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    <input type="email" class="form-control" asp-for="Customer.Email" />
+                </div>
+                <span asp-validation-for="Customer.Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" asp-for="Customer.Notes">@L["Notes"]</label>
+                <textarea class="form-control" asp-for="Customer.Notes" rows="3"></textarea>
+                <span asp-validation-for="Customer.Notes" class="text-danger"></span>
+            </div>
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>
