@@ -1,217 +1,49 @@
 ﻿@page
-@model BeroxApp.Web.Pages.Services.IndexModel
-@using BeroxApp.Permissions
-@using BeroxApp.Localization
 @using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using BeroxApp.Services
+@using BeroxApp.Web.Pages.Services
+@using BeroxApp.Localization
+@using BeroxApp.Permissions
+@using Microsoft.Extensions.Localization
+@model IndexModel
 @inject IAuthorizationService AuthorizationService
-@inject IHtmlLocalizer<BeroxAppResource> L
-@{
-    ViewData["Title"] = L["Services"];
+@inject IStringLocalizer<BeroxAppResource> L
+
+@section scripts
+{
+    <abp-script src="/Pages/Services/Index.js" />
 }
 
-<div class="card">
-    <div class="card-header">
-        <div class="row">
-            <div class="col-md-6">
-                <h5 class="card-title">@L["Services"]</h5>
-            </div>
-            <div class="col-md-6 text-end">
+<abp-card>
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <abp-card-title>@L["Services"]</abp-card-title>
+            </abp-column>
+            <abp-column size-md="_6" class="text-end">
                 @if (await AuthorizationService.IsGrantedAsync(BeroxAppPermissions.Services.Create))
                 {
-                    <button type="button" class="btn btn-primary" id="NewServiceButton">
-                        <i class="fas fa-plus"></i> @L["NewService"]
-                    </button>
+                    <abp-button id="NewServiceButton"
+                                text="@L["NewService"]"
+                                icon="plus"
+                                button-type="Primary" />
                 }
-            </div>
-        </div>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>@L["Name"]</th>
-                        <th>@L["Description"]</th>
-                        <th>@L["Duration"]</th>
-                        <th>@L["Price"]</th>
-                        <th>@L["Status"]</th>
-                        <th>@L["Actions"]</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var service in Model.Services.Items)
-                    {
-                        <tr>
-                            <td>@service.Name</td>
-                            <td>@service.Description</td>
-                            <td>@service.Duration @L["Minutes"]</td>
-                            <td>@service.Price.ToString("C")</td>
-                            <td>
-                                @if (service.IsActive)
-                                {
-                                    <span class="badge bg-success">@L["Active"]</span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-danger">@L["Inactive"]</span>
-                                }
-                            </td>
-                            <td>
-                                <div class="dropdown">
-                                    <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                        @L["Actions"]
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        @if (await AuthorizationService.IsGrantedAsync(BeroxAppPermissions.Services.Edit))
-                                        {
-                                            <li>
-                                                <a class="dropdown-item" href="javascript:void(0)" onclick="editService('@service.Id')">
-                                                    <i class="fa fa-edit"></i> @L["Edit"]
-                                                </a>
-                                            </li>
-                                        }
-                                        @if (await AuthorizationService.IsGrantedAsync(BeroxAppPermissions.Services.Delete))
-                                        {
-                                            <li>
-                                                <a class="dropdown-item" href="javascript:void(0)" onclick="deleteService('@service.Id')">
-                                                    <i class="fa fa-trash"></i> @L["Delete"]
-                                                </a>
-                                            </li>
-                                        }
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<!-- Create/Edit Modal -->
-<div class="modal fade" id="ServiceModal" tabindex="-1" role="dialog" aria-labelledby="ServiceModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="ServiceModalLabel">@L["NewService"]</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form id="ServiceForm">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="ServiceName">@L["Name"]</label>
-                        <input type="text" class="form-control" id="ServiceName" name="Name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="ServiceDescription">@L["Description"]</label>
-                        <textarea class="form-control" id="ServiceDescription" name="Description" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="ServiceDuration">@L["Duration"] (@L["Minutes"])</label>
-                        <input type="number" class="form-control" id="ServiceDuration" name="Duration" required min="1">
-                    </div>
-                    <div class="form-group">
-                        <label for="ServicePrice">@L["Price"]</label>
-                        <input type="number" class="form-control" id="ServicePrice" name="Price" required min="0" step="0.01">
-                    </div>
-                    <div class="form-group">
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="ServiceIsActive" name="IsActive" checked>
-                            <label class="form-check-label" for="ServiceIsActive">
-                                @L["IsActive"]
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@L["Cancel"]</button>
-                    <button type="submit" class="btn btn-primary">@L["Save"]</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-@section Scripts
-{
-    <script>
-        var serviceId = null;
-
-        // Yeni Servis Butonu
-        $('#NewServiceButton').click(function () {
-            serviceId = null;
-            $('#ServiceModalLabel').text('@L["NewService"]');
-            $('#ServiceForm')[0].reset();
-            $('#ServiceIsActive').prop('checked', true);
-            $('#ServiceModal').modal('show');
-        });
-
-        // Servis Formu Gönderme
-        $('#ServiceForm').submit(function (e) {
-            e.preventDefault();
-
-            var formData = {
-                Name: $('#ServiceName').val(),
-                Description: $('#ServiceDescription').val(),
-                Duration: parseInt($('#ServiceDuration').val()),
-                Price: parseFloat($('#ServicePrice').val()),
-                IsActive: $('#ServiceIsActive').is(':checked')
-            };
-
-            var url = serviceId ? '/api/app/service/' + serviceId : '/api/app/service';
-            var method = serviceId ? 'PUT' : 'POST';
-
-            $.ajax({
-                url: url,
-                method: method,
-                data: JSON.stringify(formData),
-                contentType: 'application/json',
-                success: function (result) {
-                    $('#ServiceModal').modal('hide');
-                    abp.notify.success('@L["SuccessfullySaved"]');
-                    location.reload();
-                },
-                error: function (xhr) {
-                    abp.notify.error('@L["AnErrorOccurred"]');
-                }
-            });
-        });
-
-        // Servis Silme
-        function deleteService(id) {
-            abp.message.confirm('@L["AreYouSure"]', '@L["Delete"]')
-                .then(function (confirmed) {
-                    if (confirmed) {
-                        $.ajax({
-                            url: '/api/app/service/' + id,
-                            method: 'DELETE',
-                            success: function () {
-                                abp.notify.success('@L["SuccessfullyDeleted"]');
-                                location.reload();
-                            },
-                            error: function () {
-                                abp.notify.error('@L["AnErrorOccurred"]');
-                            }
-                        });
-                    }
-                });
-        }
-
-        // Servis Düzenleme
-        function editService(id) {
-            $.get('/api/app/service/' + id, function (service) {
-                serviceId = id;
-                $('#ServiceModalLabel').text('@L["EditService"]');
-                $('#ServiceName').val(service.name);
-                $('#ServiceDescription').val(service.description);
-                $('#ServiceDuration').val(service.duration);
-                $('#ServicePrice').val(service.price);
-                $('#ServiceIsActive').prop('checked', service.isActive);
-                $('#ServiceModal').modal('show');
-            });
-        }
-    </script>
-}
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="ServicesTable" class="nowrap">
+            <thead>
+                <tr>
+                    <th>@L["Actions"]</th>
+                    <th>@L["ServiceName"]</th>
+                    <th>@L["Description"]</th>
+                    <th>@L["Duration"]</th>
+                    <th>@L["Price"]</th>
+                    <th>@L["Status"]</th>
+                </tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>

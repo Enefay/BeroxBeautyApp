@@ -1,0 +1,60 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using BeroxApp.Localization
+@using BeroxApp.Web.Pages.Services
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model CreateEditModalModel
+@inject IHtmlLocalizer<BeroxAppResource> L
+
+@{
+    Layout = null;
+}
+
+<form asp-page="/Services/CreateEditModal">
+    <abp-modal>
+        <abp-modal-header title="@(Model.Id == Guid.Empty ? L["NewService"].Value : L["EditService"].Value)"></abp-modal-header>
+        <abp-modal-body>
+            <abp-input asp-for="Id" />
+
+            <div class="mb-3">
+                <label class="form-label" asp-for="Service.Name">@L["ServiceName"] *</label>
+                <input type="text" class="form-control" asp-for="Service.Name" required />
+                <span asp-validation-for="Service.Name" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" asp-for="Service.Description">@L["Description"]</label>
+                <textarea class="form-control" asp-for="Service.Description" rows="3"></textarea>
+                <span asp-validation-for="Service.Description" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Service.Duration">@L["Duration"] (@L["Minutes"]) *</label>
+                        <input type="number" class="form-control" asp-for="Service.Duration" min="1" required />
+                        <span asp-validation-for="Service.Duration" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Service.Price">@L["Price"] (₺) *</label>
+                        <input type="number" class="form-control" asp-for="Service.Price" step="0.01" min="0" required />
+                        <span asp-validation-for="Service.Price" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" asp-for="Service.IsActive" />
+                    <label class="form-check-label" asp-for="Service.IsActive">
+                        @L["Active"]
+                    </label>
+                </div>
+                <span asp-validation-for="Service.IsActive" class="text-danger"></span>
+            </div>
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>
