@@ -1,57 +1,58 @@
 ﻿namespace BeroxApp.Permissions;
 
-public static class BeroxAppPermissions
-{
-    public const string GroupName = "BeroxApp";
 
-
-    // Service Permissions
-    public static class Services
+    public static class BeroxAppPermissions
     {
-        public const string Default = GroupName + ".Services";
-        public const string Create = Default + ".Create";
-        public const string Edit = Default + ".Edit";
-        public const string Delete = Default + ".Delete";
-    }
+        public static class Services
+        {
+            public const string GroupName = "BeroxApp.Services";
+            public const string Default = GroupName;
+            public const string Create = GroupName + ".Create";
+            public const string Edit = GroupName + ".Edit";
+            public const string Delete = GroupName + ".Delete";
+        }
 
-    // Customer Permissions
-    public static class Customers
-    {
-        public const string Default = GroupName + ".Customers";
-        public const string Create = Default + ".Create";
-        public const string Edit = Default + ".Edit";
-        public const string Delete = Default + ".Delete";
-    }
+        public static class Customers
+        {
+            public const string GroupName = "BeroxApp.Customers";
+            public const string Default = GroupName;
+            public const string Create = GroupName + ".Create";
+            public const string Edit = GroupName + ".Edit";
+            public const string Delete = GroupName + ".Delete";
+        }
 
-    // Employee Permissions
-    public static class Employees
-    {
-        public const string Default = GroupName + ".Employees";
-        public const string Create = Default + ".Create";
-        public const string Edit = Default + ".Edit";
-        public const string Delete = Default + ".Delete";
-    }
+        public static class Employees
+        {
+            public const string GroupName = "BeroxApp.Employees";
+            public const string Default = GroupName;
+            public const string Create = GroupName + ".Create";
+            public const string Edit = GroupName + ".Edit";
+            public const string Delete = GroupName + ".Delete";
+        }
 
-    // Reservation Permissions
-    public static class Reservations
-    {
-        public const string Default = GroupName + ".Reservations";
-        public const string Create = Default + ".Create";
-        public const string Edit = Default + ".Edit";
-        public const string Delete = Default + ".Delete";
-        public const string Approve = Default + ".Approve";
-        public const string Complete = Default + ".Complete";
-        public const string Cancel = Default + ".Cancel";
-    }
+        public static class Reservations
+        {
+            public const string GroupName = "BeroxApp.Reservations";
+            public const string Default = GroupName;
+            public const string Create = GroupName + ".Create";
+            public const string Edit = GroupName + ".Edit";
+            public const string Delete = GroupName + ".Delete";
+            public const string Approve = GroupName + ".Approve";
+            public const string Complete = GroupName + ".Complete";
+            public const string Cancel = GroupName + ".Cancel";
+        }
 
-    // Finance Permissions
-    public static class Finance
-    {
-        public const string Default = GroupName + ".Finance";
-        public const string Expenses = Default + ".Expenses";
-        public const string CreateExpense = Expenses + ".Create";
-        public const string EditExpense = Expenses + ".Edit";
-        public const string DeleteExpense = Expenses + ".Delete";
-        public const string Reports = Default + ".Reports";
-    }
+        public static class Finance
+        {
+            public const string GroupName = "BeroxApp.Finance";
+            public const string Default = GroupName;
+
+            public const string Expenses = GroupName + ".Expenses";
+            public const string CreateExpense = Expenses + ".Create";
+            public const string EditExpense = Expenses + ".Edit";
+            public const string DeleteExpense = Expenses + ".Delete";
+
+            public const string Reports = GroupName + ".Reports";
+        }
+
 }
