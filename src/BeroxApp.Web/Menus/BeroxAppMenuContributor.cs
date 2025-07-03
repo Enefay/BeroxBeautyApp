@@ -34,6 +34,20 @@ public class BeroxAppMenuContributor : IMenuContributor
             )
         );
 
+        // Services Menu
+        var servicesMenu = new ApplicationMenuItem(
+            BeroxAppMenus.Services,
+            l["Menu:Services"],
+            url: "/Services",
+            icon: "fas fa-briefcase"
+        );
+
+        context.Menu.AddItem(servicesMenu);
+
+        // Diğer menüler için yetki kontrolü ve eklemeler burada yapılabilir
+        // Örnek: Müşteriler, Çalışanlar, Rezervasyonlar, Finans vb.
+
+
         if (MultiTenancyConsts.IsEnabled)
         {
             administration.SetSubItemOrder(TenantManagementMenuNames.GroupName, 1);
