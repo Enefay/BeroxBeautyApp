@@ -29,6 +29,27 @@
     "Permission:Finance.CreateExpense": "Gider Oluştur",
     "Permission:Finance.EditExpense": "Gideri Düzenle",
     "Permission:Finance.DeleteExpense": "Gideri Sil",
-    "Permission:Finance.Reports": "Finans Raporları"
+    "Permission:Finance.Reports": "Finans Raporları",
+    "Services": "Hizmetler",
+    "NewService": "Yeni Hizmet",
+    "EditService": "Hizmet Düzenle",
+    "Name": "Ad",
+    "Description": "Açıklama",
+    "Duration": "Süre",
+    "Minutes": "Dakika",
+    "Price": "Fiyat",
+    "Status": "Durum",
+    "Active": "Aktif",
+    "Inactive": "Pasif",
+    "IsActive": "Aktif",
+    "Actions": "İşlemler",
+    "Edit": "Düzenle",
+    "Delete": "Sil",
+    "Save": "Kaydet",
+    "Cancel": "İptal",
+    "AreYouSure": "Emin misiniz?",
+    "SuccessfullySaved": "Başarıyla kaydedildi.",
+    "SuccessfullyDeleted": "Başarıyla silindi.",
+    "AnErrorOccurred": "Bir hata oluştu."
   }
 }

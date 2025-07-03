@@ -29,6 +29,27 @@
     "Permission:Finance.CreateExpense": "Create Expense",
     "Permission:Finance.EditExpense": "Edit Expense",
     "Permission:Finance.DeleteExpense": "Delete Expense",
-    "Permission:Finance.Reports": "Finance Reports"
+    "Permission:Finance.Reports": "Finance Reports",
+    "Services": "Services",
+    "NewService": "New Service",
+    "EditService": "Edit Service",
+    "Name": "Name",
+    "Description": "Description",
+    "Duration": "Duration",
+    "Minutes": "Minutes",
+    "Price": "Price",
+    "Status": "Status",
+    "Active": "Active",
+    "Inactive": "Inactive",
+    "IsActive": "Is Active",
+    "Actions": "Actions",
+    "Edit": "Edit",
+    "Delete": "Delete",
+    "Save": "Save",
+    "Cancel": "Cancel",
+    "AreYouSure": "Are you sure?",
+    "SuccessfullySaved": "Successfully saved.",
+    "SuccessfullyDeleted": "Successfully deleted.",
+    "AnErrorOccurred": "An error occurred."
   }
 }
