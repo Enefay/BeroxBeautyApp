@@ -15,6 +15,8 @@ namespace BeroxApp.Web.Pages.Employees
         [BindProperty]
         public CreateUpdateEmployeeDto Employee { get; set; }
 
+        public string UserName { get; set; } // Yeni eklendi
+
         private readonly IEmployeeAppService _employeeAppService;
 
         public CreateEditModalModel(IEmployeeAppService employeeAppService)
@@ -34,9 +36,9 @@ namespace BeroxApp.Web.Pages.Employees
                     PhoneNumber = employeeDto.PhoneNumber,
                     Email = employeeDto.Email,
                     MonthlySalary = employeeDto.MonthlySalary,
-                    IsActive = employeeDto.IsActive,
-                    UserId = employeeDto.UserId
+                    IsActive = employeeDto.IsActive
                 };
+                UserName = employeeDto.UserName;
             }
             else
             {

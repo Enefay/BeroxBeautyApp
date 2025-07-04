@@ -77,12 +77,17 @@
     "PhoneNumberMustBeDigits": "Phone number must contain only digits",
     "Customer:DuplicatePhoneNumber": "This phone number is already registered!",
 
+    "Employees": "Employees",
     "NewEmployee": "New Employee",
     "EditEmployee": "Edit Employee",
     "MonthlySalary": "Monthly Salary",
     "EmployeeDeletionConfirmationMessage": "Employee '{0}' will be deleted. Are you sure?",
     "SalaryMustBePositive": "Salary must be greater than 0",
     "Employee": "Employee",
-    "SelectEmployee": "Select Employee"
+    "SelectEmployee": "Select Employee",
+    "Username": "Username",
+    "EmployeeUserWillBeCreated": "A user will be automatically created for the employee. Password: firstname.lastname1*",
+    "BeroxApp:EmployeeRoleNotFound": "Employee role not found! Please create Employee role first.",
+    "BeroxApp:UserCreationFailed": "User creation failed: {Errors}"
   }
 }

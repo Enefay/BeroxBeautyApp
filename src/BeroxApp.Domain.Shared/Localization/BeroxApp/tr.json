@@ -86,6 +86,10 @@
     "EmployeeDeletionConfirmationMessage": "{0} çalışanı silinecek. Emin misiniz?",
     "SalaryMustBePositive": "Maaş 0'dan büyük olmalıdır",
     "Employee": "Çalışan",
-    "SelectEmployee": "Çalışan Seçin"
+    "SelectEmployee": "Çalışan Seçin",
+    "Username": "Kullanıcı Adı",
+    "EmployeeUserWillBeCreated": "Çalışan için otomatik olarak kullanıcı oluşturulacak. Şifre: ad.soyad1*",
+    "BeroxApp:EmployeeRoleNotFound": "Employee rolü bulunamadı! Lütfen önce Employee rolünü oluşturun.",
+    "BeroxApp:UserCreationFailed": "Kullanıcı oluşturulamadı: {Errors}"
   }
 }

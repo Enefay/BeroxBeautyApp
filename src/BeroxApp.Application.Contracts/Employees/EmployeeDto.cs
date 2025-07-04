@@ -17,6 +17,7 @@ namespace BeroxApp.Employees
         public decimal MonthlySalary { get; set; }
         public bool IsActive { get; set; }
         public Guid? UserId { get; set; }
+        public string UserName { get; set; }
     }
 
     public class CreateUpdateEmployeeDto
@@ -27,6 +28,5 @@ namespace BeroxApp.Employees
         public string Email { get; set; }
         public decimal MonthlySalary { get; set; }
         public bool IsActive { get; set; } = true;
-        public Guid? UserId { get; set; }
     }
 }

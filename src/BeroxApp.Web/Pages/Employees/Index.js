@@ -64,7 +64,7 @@
                                     text: l('Delete'),
                                     visible: abp.auth.isGranted('BeroxApp.Employees.Delete'),
                                     confirmMessage: function (data) {
-                                        return l('EmployeeDeletionConfirmationMessage', data.record.fullName);
+                                        return l('EmployeeDeletionConfirmationMessage', data.record.firstName);
                                     },
                                     action: function (data) {
                                         beroxApp.employees.employee
@@ -80,9 +80,9 @@
                 },
                 {
                     title: l('FullName'),
-                    data: "fullName",
+                    data: "firstName",
                     render: function (data, type, row) {
-                        return '<strong>' + data + '</strong>';
+                        return '<strong>' + row.firstName + ' ' + row.lastName + '</strong>';
                     }
                 },
                 {
