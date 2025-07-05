@@ -26,9 +26,7 @@ public class BeroxAppApplicationAutoMapperProfile : Profile
         // Reservation mappings
         CreateMap<Reservation, ReservationDto>()
             .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Customer.FullName))
-            .ForMember(dest => dest.CustomerPhone, opt => opt.MapFrom(src => src.Customer.PhoneNumber))
-            .ForMember(dest => dest.EmployeeName, opt => opt.MapFrom(src => src.Employee.FullName))
-            .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.Service.Name));
+            .ForMember(dest => dest.CustomerPhone, opt => opt.MapFrom(src => src.Customer.PhoneNumber));
         CreateMap<CreateReservationDto, Reservation>();
         CreateMap<UpdateReservationDto, Reservation>();
 

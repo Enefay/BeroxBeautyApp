@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BeroxApp.ReservationServiceEmployees;
 using Microsoft.AspNetCore.Authorization;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
@@ -33,8 +35,7 @@ namespace BeroxApp.Reservations
         {
             var queryable = await _reservationRepository.WithDetailsAsync(
                 x => x.Customer,
-                x => x.Employee,
-                x => x.Service
+                x => x.ReservationServices
             );
 
             var reservation = await AsyncExecuter.FirstOrDefaultAsync(
@@ -48,17 +49,14 @@ namespace BeroxApp.Reservations
         {
             var queryable = await _reservationRepository.WithDetailsAsync(
                 x => x.Customer,
-                x => x.Employee,
-                x => x.Service
+                x => x.ReservationServices
             );
 
             // Filtreleme
             queryable = queryable
                 .WhereIf(input.StartDate.HasValue, x => x.ReservationDate >= input.StartDate.Value)
                 .WhereIf(input.EndDate.HasValue, x => x.ReservationDate <= input.EndDate.Value)
-                .WhereIf(input.Status.HasValue, x => x.Status == input.Status.Value)
-                .WhereIf(input.EmployeeId.HasValue, x => x.EmployeeId == input.EmployeeId.Value)
-                .WhereIf(input.CustomerId.HasValue, x => x.CustomerId == input.CustomerId.Value);
+                .WhereIf(input.Status.HasValue, x => x.Status == input.Status.Value);
 
             // Sıralama
             queryable = queryable.OrderByDescending(x => x.ReservationDate);
@@ -76,20 +74,49 @@ namespace BeroxApp.Reservations
 
         public async Task<ReservationDto> CreateAsync(CreateReservationDto input)
         {
-            // Hizmet fiyatını al
-            var service = await _serviceRepository.GetAsync(input.ServiceId);
+            if (input.Services == null || !input.Services.Any())
+            {
+                throw new BusinessException("Reservation:MustHaveAtLeastOneService");
+            }
+
+            decimal totalServicePrice = 0;
+
+            // Tüm servis bilgilerini çek ve fiyatları topla
+            var serviceIds = input.Services.Select(x => x.ServiceId).Distinct().ToList();
+            var services = await _serviceRepository.GetListAsync(x => serviceIds.Contains(x.Id));
+            var serviceDict = services.ToDictionary(x => x.Id, x => x);
 
             var reservation = new Reservation(
                 GuidGenerator.Create(),
                 input.CustomerId,
-                input.EmployeeId,
-                input.ServiceId,
                 input.ReservationDate,
-                service.Price
+                0 // geçici olarak sıfır veriyoruz
             )
             {
                 Notes = input.Notes
             };
+
+            foreach (var item in input.Services)
+            {
+                if (!serviceDict.TryGetValue(item.ServiceId, out var service))
+                {
+                    throw new BusinessException("Reservation:InvalidService").WithData("serviceId", item.ServiceId);
+                }
+
+                var entry = new ReservationServiceEmployee
+                {
+                    ReservationId = reservation.Id,
+                    ServiceId = item.ServiceId,
+                    EmployeeId = item.EmployeeId
+                };
+
+                reservation.ReservationServices.Add(entry);
+
+                totalServicePrice += service.Price;
+            }
+
+            reservation.ServicePrice = totalServicePrice;
+            reservation.FinalPrice = totalServicePrice;
 
             await _reservationRepository.InsertAsync(reservation);
 
@@ -157,8 +184,7 @@ namespace BeroxApp.Reservations
 
             var queryable = await _reservationRepository.WithDetailsAsync(
                 x => x.Customer,
-                x => x.Employee,
-                x => x.Service
+                x => x.ReservationServices
             );
 
             var reservations = await AsyncExecuter.ToListAsync(

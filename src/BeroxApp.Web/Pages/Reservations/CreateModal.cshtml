@@ -1,0 +1,121 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using BeroxApp.Localization
+@using BeroxApp.Web.Pages.Reservations
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model CreateModalModel
+@inject IHtmlLocalizer<BeroxAppResource> L
+@{
+    Layout = null;
+}
+
+<form asp-page="/Reservations/CreateModal">
+    <abp-modal size="Large" scrollable="true" id="ReservationCreateModal">
+        <abp-modal-header title="Rezervasyon"></abp-modal-header>
+        <abp-modal-body>
+            <div class="mb-4 position-relative">
+                <label class="form-label fw-bold">@L["Customer"] *</label>
+                <input type="text" id="customer-search" class="form-control" placeholder="@L["SearchCustomer"]" />
+                <input type="hidden" asp-for="Reservation.CustomerId" />
+                <div class="dropdown-menu w-100 shadow-sm" id="customer-search-results"></div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-bold">@L["Date"] *</label>
+                <input type="date" class="form-control" asp-for="Reservation.ReservationDate"
+                       min="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+            </div>
+
+            <div id="service-employee-repeaters">
+                <div class="repeater-item border border-secondary rounded p-3 mb-3 bg-light">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-md-8">
+                            <label class="form-label">@L["Employee"] *</label>
+                            <select class="form-select employee-select" name="Reservation.Services[0].EmployeeId" required>
+                                <option value="">@L["SelectEmployee"]</option>
+                                @foreach (var employee in Model.Employees)
+                                {
+                                    <option value="@employee.Value">@employee.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <button type="button" class="btn btn-danger btn-sm remove-service-row">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-end">
+                <button type="button" class="btn btn-outline-primary mb-3" id="add-service-row">
+                    <i class="fa fa-plus"></i> @L["AddService"]
+                </button>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">@L["Notes"]</label>
+                <textarea class="form-control" asp-for="Reservation.Notes" rows="3"></textarea>
+            </div>
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)" />
+    </abp-modal>
+</form>
+
+    <script>
+        let index = 1;
+        $('#add-service-row').click(function () {
+            const newRow = $('.repeater-item').first().clone();
+            newRow.find('select').each(function () {
+                const name = $(this).attr('name');
+                const newName = name.replace(/\[0\]/, `[${index}]`);
+                $(this).attr('name', newName).val('');
+            });
+            $('#service-employee-repeaters').append(newRow);
+            index++;
+        });
+
+        $(document).on('click', '.remove-service-row', function () {
+            if ($('.repeater-item').length > 1)
+                $(this).closest('.repeater-item').remove();
+        });
+
+        let debounce;
+        $('#customer-search').on('input', function () {
+            clearTimeout(debounce);
+            const query = $(this).val();
+            if (query.length < 2) return $('#customer-search-results').hide();
+            debounce = setTimeout(() => {
+                abp.ajax({
+                    url: `/api/app/customer/search`,
+                    type: 'POST',
+                    data: JSON.stringify({ query: query }),
+                    contentType: 'application/json'
+                }).done(result => {
+                    const list = result.items.map(c =>
+                        `<button type="button" class="dropdown-item" data-id="${c.id}" data-name="${c.fullName}">${c.fullName} - ${c.phoneNumber}</button>`
+                    );
+                    list.push('<button type="button" class="dropdown-item text-primary" id="create-new-customer">+ Yeni Müşteri</button>');
+                    $('#customer-search-results').html(list.join('')).show();
+                });
+            }, 300);
+        });
+
+        $(document).on('click', '.dropdown-item[data-id]', function () {
+            $('#Reservation_CustomerId').val($(this).data('id'));
+            $('#customer-search').val($(this).data('name'));
+            $('#customer-search-results').hide();
+        });
+
+        let customerCreateModal = null;
+        $(document).on('click', '#create-new-customer', function () {
+            if (!customerCreateModal) {
+                customerCreateModal = new abp.ModalManager({
+                    viewUrl: '/Customers/CreateEditModal',
+                    modalClass: 'customer-create-modal'
+                });
+            }
+            customerCreateModal.open();
+        });
+    </script>

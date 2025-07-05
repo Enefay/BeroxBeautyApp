@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeroxApp.ReservationServices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,10 +33,9 @@ namespace BeroxApp.Reservations
     public class CreateReservationDto
     {
         public Guid CustomerId { get; set; }
-        public Guid EmployeeId { get; set; }
-        public Guid ServiceId { get; set; }
         public DateTime ReservationDate { get; set; }
         public string Notes { get; set; }
+        public List<ReservationServiceDto> Services { get; set; } = new();
     }
 
     public class UpdateReservationDto

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
@@ -13,8 +15,10 @@ namespace BeroxApp.Customers
     [Authorize]
     public class CustomerAppService : CrudAppService<Customer, CustomerDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateCustomerDto>, ICustomerAppService
     {
+        private readonly IRepository<Customer> _customerRepository;
         public CustomerAppService(IRepository<Customer, Guid> repository) : base(repository)
         {
+            _customerRepository = repository;
         }
 
         public async Task<CustomerDto> GetByPhoneNumberAsync(string phoneNumber)
@@ -47,5 +51,34 @@ namespace BeroxApp.Customers
             await Repository.InsertAsync(customer);
             return ObjectMapper.Map<Customer, CustomerDto>(customer);
         }
+
+        [HttpPost]
+        [Route("api/app/customer/search")]
+        public async Task<ListResultDto<CustomerLookupDto>> SearchAsync([FromBody] CustomerSearchInput input)
+        {
+            var queryable = await _customerRepository.GetQueryableAsync();
+            var list = queryable
+                .Where(x => x.FirstName.Contains(input.Query) || x.LastName.Contains(input.Query))
+                .OrderBy(x => x.FirstName)
+                .Take(5)
+                .ToList();
+
+            return new ListResultDto<CustomerLookupDto>(
+                list.Select(x => new CustomerLookupDto
+                {
+                    Id = x.Id,
+                    FullName = $"{x.FirstName} {x.LastName}",
+                    PhoneNumber = x.PhoneNumber
+                }).ToList()
+            );
+        }
+
+        public class CustomerSearchInput
+        {
+            public string Query { get; set; }
+        }
+
+
+
     }
 }

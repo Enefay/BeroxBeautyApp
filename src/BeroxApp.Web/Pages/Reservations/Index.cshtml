@@ -1,0 +1,93 @@
+﻿@page
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using BeroxApp.Reservations
+@using BeroxApp.Web.Pages.Reservations
+@using BeroxApp.Localization
+@using BeroxApp.Permissions
+@using Microsoft.Extensions.Localization
+@model IndexModel
+@inject IAuthorizationService AuthorizationService
+@inject IStringLocalizer<BeroxAppResource> L
+
+@section scripts
+{
+    <abp-script-bundle>
+        <abp-script src="/Pages/Reservations/CreateModal.js" />
+        <abp-script src="/Pages/Reservations/Index.js" />
+    </abp-script-bundle>
+}
+
+<abp-card>
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <abp-card-title>@L["Reservations"]</abp-card-title>
+            </abp-column>
+            <abp-column size-md="_6" class="text-end">
+                @if (await AuthorizationService.IsGrantedAsync(BeroxAppPermissions.Reservations.Create))
+                {
+                    <abp-button id="NewReservationButton"
+                                text="@L["NewReservation"]"
+                                icon="plus"
+                                button-type="Primary" />
+                }
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <!-- Filtreler -->
+        <form id="ReservationFilterForm" class="mb-3">
+            <abp-row>
+                <abp-column size-md="_3">
+                    <div class="form-floating">
+                        <input type="date" id="StartDate" name="StartDate" class="form-control" />
+                        <label for="StartDate">@L["StartDate"]</label>
+                    </div>
+                </abp-column>
+                <abp-column size-md="_3">
+                    <div class="form-floating">
+                        <input type="date" id="EndDate" name="EndDate" class="form-control" />
+                        <label for="EndDate">@L["EndDate"]</label>
+                    </div>
+                </abp-column>
+                <abp-column size-md="_3">
+                    <div class="form-floating">
+                        <select id="StatusFilter" name="Status" class="form-select">
+                            <option value="">@L["All"]</option>
+                            <option value="0">@L["Pending"]</option>
+                            <option value="1">@L["Approved"]</option>
+                            <option value="2">@L["Completed"]</option>
+                            <option value="3">@L["Cancelled"]</option>
+                        </select>
+                        <label for="StatusFilter">@L["Status"]</label>
+                    </div>
+                </abp-column>
+                <abp-column size-md="_3">
+                    <abp-button id="FilterButton"
+                                text="@L["Filter"]"
+                                icon="search"
+                                button-type="Primary" />
+                    <abp-button id="ClearFilterButton"
+                                text="@L["Clear"]"
+                                icon="refresh"
+                                button-type="Secondary" />
+                </abp-column>
+            </abp-row>
+        </form>
+
+        <abp-table striped-rows="true" id="ReservationsTable" class="nowrap">
+            <thead>
+                <tr>
+                    <th>@L["Actions"]</th>
+                    <th>@L["ReservationDate"]</th>
+                    <th>@L["Customer"]</th>
+                    <th>@L["Employee"]</th>
+                    <th>@L["Service"]</th>
+                    <th>@L["Status"]</th>
+                    <th>@L["FinalPrice"]</th>
+                </tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>

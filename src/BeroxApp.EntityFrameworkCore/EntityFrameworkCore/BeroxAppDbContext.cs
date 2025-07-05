@@ -2,6 +2,7 @@
 using BeroxApp.Employees;
 using BeroxApp.Finance;
 using BeroxApp.Reservations;
+using BeroxApp.ReservationServiceEmployees;
 using BeroxApp.Services;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
@@ -69,6 +70,7 @@ public class BeroxAppDbContext :
     public DbSet<EmployeeService> EmployeeServices { get; set; }
     public DbSet<Reservation> Reservations { get; set; }
     public DbSet<Expense> Expenses { get; set; }
+    public DbSet<ReservationServiceEmployee> ReservationServiceEmployees { get; set; }
 
     public BeroxAppDbContext(DbContextOptions<BeroxAppDbContext> options)
         : base(options)
@@ -157,9 +159,6 @@ public class BeroxAppDbContext :
             b.Property(x => x.Email).HasMaxLength(128);
             b.Property(x => x.MonthlySalary).HasPrecision(18, 2);
 
-            b.HasMany(x => x.Reservations).WithOne(x => x.Employee).HasForeignKey(x => x.EmployeeId);
-            b.HasMany(x => x.EmployeeServices).WithOne(x => x.Employee).HasForeignKey(x => x.EmployeeId);
-
             b.HasIndex(x => x.UserId);
         });
 
@@ -188,12 +187,37 @@ public class BeroxAppDbContext :
             b.Property(x => x.Notes).HasMaxLength(1024);
 
             b.HasOne(x => x.Customer).WithMany(x => x.Reservations).HasForeignKey(x => x.CustomerId);
-            b.HasOne(x => x.Employee).WithMany(x => x.Reservations).HasForeignKey(x => x.EmployeeId);
-            b.HasOne(x => x.Service).WithMany().HasForeignKey(x => x.ServiceId);
 
             b.HasIndex(x => x.ReservationDate);
             b.HasIndex(x => x.Status);
         });
+
+        // ReservationServiceEmployee Configuration
+        builder.Entity<ReservationServiceEmployee>(b =>
+        {
+            b.ToTable(BeroxAppConsts.DbTablePrefix + "ReservationServiceEmployees", BeroxAppConsts.DbSchema);
+            b.ConfigureByConvention();
+
+            b.HasOne(x => x.Reservation)
+                .WithMany(x => x.ReservationServices)
+                .HasForeignKey(x => x.ReservationId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            b.HasOne(x => x.Service)
+                .WithMany()
+                .HasForeignKey(x => x.ServiceId);
+
+            b.HasOne(x => x.Employee)
+                .WithMany()
+                .HasForeignKey(x => x.EmployeeId);
+
+
+            b.HasIndex(x => x.ReservationId);
+            b.HasIndex(x => x.EmployeeId);
+            b.HasIndex(x => x.ServiceId);
+        });
+
+
 
         // Expense Configuration
         builder.Entity<Expense>(b =>

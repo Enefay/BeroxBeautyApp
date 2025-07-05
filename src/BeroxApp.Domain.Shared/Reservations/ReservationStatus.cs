@@ -8,9 +8,9 @@ namespace BeroxApp.Reservations
 {
     public enum ReservationStatus
     {
-        Pending = 1,
-        Approved = 2,
-        Completed = 3,
-        Cancelled = 4
+        Pending = 0,      // Bekliyor
+        Approved = 1,     // Onaylandı
+        Completed = 2,    // Tamamlandı
+        Cancelled = 3     // İptal Edildi
     }
 }

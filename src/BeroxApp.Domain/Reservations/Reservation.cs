@@ -1,5 +1,6 @@
 ﻿using BeroxApp.Customers;
 using BeroxApp.Employees;
+using BeroxApp.ReservationServiceEmployees;
 using BeroxApp.Services;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,6 @@ namespace BeroxApp.Reservations
     {
         public Guid? TenantId { get; set; }
         public Guid CustomerId { get; set; }
-        public Guid EmployeeId { get; set; }
-        public Guid ServiceId { get; set; }
         public DateTime ReservationDate { get; set; }
         public ReservationStatus Status { get; set; }
         public decimal ServicePrice { get; set; } // Rezervasyon anındaki fiyat
@@ -27,26 +26,24 @@ namespace BeroxApp.Reservations
         public DateTime? CompletedDate { get; set; }
 
         public virtual Customer Customer { get; set; }
-        public virtual Employee Employee { get; set; }
-        public virtual Service Service { get; set; }
+        public virtual ICollection<ReservationServiceEmployee> ReservationServices { get; set; }
+
 
         protected Reservation() { }
 
         public Reservation(
-            Guid id,
-            Guid customerId,
-            Guid employeeId,
-            Guid serviceId,
-            DateTime reservationDate,
-            decimal servicePrice) : base(id)
+           Guid id,
+           Guid customerId,
+           DateTime reservationDate,
+           decimal servicePrice
+       ) : base(id)
         {
             CustomerId = customerId;
-            EmployeeId = employeeId;
-            ServiceId = serviceId;
             ReservationDate = reservationDate;
             ServicePrice = servicePrice;
             FinalPrice = servicePrice;
             Status = ReservationStatus.Pending;
+            ReservationServices = new List<ReservationServiceEmployee>();
         }
 
         public void ApproveReservation()
